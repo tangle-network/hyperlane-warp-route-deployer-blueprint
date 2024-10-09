@@ -240,7 +240,7 @@ pub async fn operate_a_warp_route(
     println!("Deserialized WarpRouteConfig: {:?}", warp_route_config);
 
     // 3. `hyperlane warp deploy` - Deploy the Hyperlane warp route
-    let should_i_deploy = true; // Prompt the user for deployment confirmation
+    let should_i_deploy = true; // Decide if this operator should deploy the warp route
     if should_i_deploy {
         let commands = vec![
             ("run warp deploy", "hyperlane warp deploy"),
