@@ -24,6 +24,8 @@ tracing-subscriber = { version = "0.3", features = ["parking_lot", "env-filter"]
 gadget-sdk = { git = "https://github.com/tangle-network/gadget", default-features = false, features = ["std", "getrandom"] }
 parking_lot = "0.12.3"
 serde_yaml = "0.9.34"
+alloy-primitives = "0.7.2"
+thiserror = { version = "1.0.64", default-features = false }
 
 [build-dependencies]
 blueprint-metadata = "0.1"

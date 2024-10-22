@@ -3764,6 +3764,7 @@ dependencies = [
 name = "hyperlane-blueprint-template"
 version = "0.1.0"
 dependencies = [
+ "alloy-primitives",
  "async-trait",
  "blueprint-metadata",
  "color-eyre",
@@ -3773,6 +3774,7 @@ dependencies = [
  "serde_json",
  "serde_yaml",
  "structopt",
+ "thiserror",
  "tokio",
  "tracing",
  "tracing-subscriber 0.3.18",

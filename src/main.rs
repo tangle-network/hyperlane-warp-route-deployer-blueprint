@@ -110,9 +110,7 @@ impl GadgetRunner for TangleGadgetRunner {
         let program = TangleEventsWatcher {
             span: self.env.span.clone(),
             client,
-            handlers: vec![
-                Box::new(start_warp_route),
-            ],
+            handlers: vec![Box::new(start_warp_route)],
         };
 
         program.into_tangle_event_listener().execute().await;

@@ -20,12 +20,18 @@ use std::error::Error;
 /// # Example
 ///
 /// ```
-/// let mut manager = GadgetProcessManager::new();
-/// let commands = vec![
-///    ("command1", "echo 'Hello World'"),
-///    ("command2", "ls -l"),
-/// ];
-/// let outputs = run_and_focus_multiple(&mut manager, commands).await?;
+/// use gadget_sdk::executor::process::manager::GadgetProcessManager;
+/// use hyperlane_blueprint_template::runner::run_and_focus_multiple;
+///
+/// async fn example() -> Result<(), Box<dyn std::error::Error>> {
+///     let mut manager = GadgetProcessManager::new();
+///     let commands = vec![
+///         ("command1", "echo 'Hello World'"),
+///         ("command2", "ls -l"),
+///     ];
+///     let outputs = run_and_focus_multiple(&mut manager, commands).await?;
+///     Ok(())
+/// }
 /// ```
 pub async fn run_and_focus_multiple<'a>(
     manager: &mut GadgetProcessManager,
