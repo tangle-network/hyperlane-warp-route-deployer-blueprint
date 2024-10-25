@@ -1,10 +1,13 @@
-use gadget_sdk::config::GadgetConfiguration;
-use gadget_sdk::executor::process::manager::GadgetProcessManager;
-use gadget_sdk::job;
-use serde::{Deserialize, Serialize};
+use gadget_sdk as sdk;
+use sdk::config::StdGadgetConfiguration;
+use sdk::ctx::{ServicesContext, TangleClientContext};
+use sdk::event_listener::tangle::jobs::{services_post_processor, services_pre_processor};
+use sdk::event_listener::tangle::TangleEventListener;
+use sdk::executor::process::manager::GadgetProcessManager;
+use sdk::tangle_subxt::tangle_testnet_runtime::api::services::events::JobCalled;
 use std::collections::HashMap;
 use std::convert::Infallible;
-use std::sync::OnceLock;
+use std::sync::{Arc, LazyLock};
 
 pub mod hyperlane;
 use crate::hyperlane::{CoreConfig, WarpRouteConfig};
@@ -12,23 +15,30 @@ use crate::hyperlane::{CoreConfig, WarpRouteConfig};
 pub mod runner;
 use runner::run_and_focus_multiple;
 
-static HYP_KEY: OnceLock<String> = OnceLock::new();
+static HYPERLANE_KEY: LazyLock<String> =
+    LazyLock::new(|| std::env::var("HYP_KEY").expect("HYP_KEY environment variable not set"));
 
-fn hyperlane_key() -> &'static str {
-    HYP_KEY.get_or_init(|| std::env::var("HYP_KEY").expect("HYP_KEY environment variable not set"))
+#[derive(TangleClientContext, ServicesContext)]
+pub struct HyperlaneContext {
+    #[config]
+    pub env: StdGadgetConfiguration,
 }
 
-#[job(
+#[sdk::job(
     id = 0,
-    params(config, advanced, use_existing_core_config),
+    params(config, advanced, existing_core_config),
     result(_),
-    verifier(evm = "HyperlaneBlueprint")
+    event_listener(
+        listener = TangleEventListener<JobCalled, Arc<HyperlaneContext>>,
+        pre_processor = services_pre_processor,
+        post_processor = services_post_processor,
+    ),
 )]
 pub async fn operate_a_warp_route(
+    ctx: Arc<HyperlaneContext>,
     config: Vec<u8>,
     advanced: bool,
-    use_existing_core_config: Vec<u8>,
-    env: GadgetConfiguration<parking_lot::RawRwLock>,
+    existing_core_config: Option<Vec<u8>>,
 ) -> Result<u64, Infallible> {
     // 1. Deploy or use an existing set of Hyperlane contracts
     //     `hyperlane registry init`
@@ -36,37 +46,40 @@ pub async fn operate_a_warp_route(
     //     `hyperlane core init` just gives you a trusted relayer setup (relayer address is deployer)
     //     `hyperlane core deploy`
     let mut manager = GadgetProcessManager::new();
-    if use_existing_core_config.is_empty() {
-        let commands = vec![
-            ("run registry init", "hyperlane registry init"),
-            (
-                "run core init advanced",
-                "hyperlane core init --advanced [config]",
-            ),
-            ("run core deploy", "hyperlane core deploy"),
-        ];
-        let outputs = run_and_focus_multiple(&mut manager, commands)
-            .await
-            .unwrap();
-    } else {
-        // Deserialize the existing core config
-        let core_config = CoreConfig::try_from(&use_existing_core_config[..]).unwrap_or_else(|e| {
-            eprintln!("Failed to deserialize existing core config: {}", e);
-            std::process::exit(1);
-        });
+    match existing_core_config {
+        Some(existing_core_config) => {
+            // Deserialize the existing core config
+            let core_config = CoreConfig::try_from(&existing_core_config[..]).unwrap_or_else(|e| {
+                eprintln!("Failed to deserialize existing core config: {}", e);
+                std::process::exit(1);
+            });
 
-        // Log the deserialized core config for debugging
-        println!("Deserialized existing core config: {:?}", core_config);
+            // Log the deserialized core config for debugging
+            println!("Deserialized existing core config: {:?}", core_config);
 
-        // Use the existing core config in subsequent operations
-        let commands = vec![
-            ("run registry init", "hyperlane registry init"),
-            ("run core init --advanced", "hyperlane core init --advanced"),
-            ("run core deploy", "hyperlane core deploy"),
-        ];
-        let outputs = run_and_focus_multiple(&mut manager, commands)
-            .await
-            .unwrap();
+            // Use the existing core config in subsequent operations
+            let commands = vec![
+                ("run registry init", "hyperlane registry init"),
+                ("run core init --advanced", "hyperlane core init --advanced"),
+                ("run core deploy", "hyperlane core deploy"),
+            ];
+            let outputs = run_and_focus_multiple(&mut manager, commands)
+                .await
+                .unwrap();
+        }
+        None => {
+            let commands = vec![
+                ("run registry init", "hyperlane registry init"),
+                (
+                    "run core init advanced",
+                    "hyperlane core init --advanced [config]",
+                ),
+                ("run core deploy", "hyperlane core deploy"),
+            ];
+            let outputs = run_and_focus_multiple(&mut manager, commands)
+                .await
+                .unwrap();
+        }
     }
 
     // 2. `hyperlane warp init` - Initialize the Hyperlane warp route
