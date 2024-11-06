@@ -24,7 +24,7 @@ alloy-primitives = "0.7.2"
 thiserror = { version = "1.0.64", default-features = false }
 
 [dependencies.gadget-sdk]
-version = "0.2.3"
+version = "0.3.0"
 features = ["getrandom"]
 
 [build-dependencies]
