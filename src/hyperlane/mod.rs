@@ -1,4 +1,3 @@
-use alloy_primitives::hex;
 use alloy_primitives::Address;
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;

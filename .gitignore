@@ -7,13 +7,13 @@ target/
 # MSVC Windows builds of rustc generate these, which store debugging information
 *.pdb
 
+# Project configuration
 .idea
 .vscode
 .zed
 
 .direnv
 .DS_Store
-node_modules
 # Solc Compiler files
 cache/
 out/
@@ -28,5 +28,7 @@ docs/
 
 # Dotenv file
 .env
-blueprint.lock
+
+# Generated blueprint files
 blueprint.json
+blueprint.lock
