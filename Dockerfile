@@ -14,11 +14,11 @@ RUN cargo build --release
 
 FROM debian:bookworm-slim AS runtime
 WORKDIR /app
-COPY --from=chef /app/target/release/hyperlane-blueprint-template /usr/local/bin
+COPY --from=chef /app/target/release/hyperlane-warp-route-deployer-blueprint /usr/local/bin
 
 LABEL org.opencontainers.image.authors="Webb Technologies Inc."
-LABEL org.opencontainers.image.description="A blueprint to operate a Hyperlane node"
-LABEL org.opencontainers.image.source="https://github.com/tangle-network/hyperlane-blueprint-template"
+LABEL org.opencontainers.image.description="A Tangle Blueprint (AVS) for deploying Hyperlane warp routes"
+LABEL org.opencontainers.image.source="https://github.com/tangle-network/hyperlane-warp-route-deployer-blueprint"
 
 ENV RUST_LOG="gadget=info"
 ENV BIND_ADDR="0.0.0.0"
@@ -26,4 +26,4 @@ ENV BIND_PORT=9632
 ENV BLUEPRINT_ID=0
 ENV SERVICE_ID=0
 
-ENTRYPOINT ["/usr/local/bin/hyperlane-blueprint-template"]
+ENTRYPOINT ["/usr/local/bin/hyperlane-warp-route-deployer-blueprint"]
