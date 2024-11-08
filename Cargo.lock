@@ -4829,7 +4829,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "hyperlane-warp-route-deployer-blueprint"
+name = "hyperlane-relayer-blueprint"
 version = "0.1.0"
 dependencies = [
  "alloy-primitives",

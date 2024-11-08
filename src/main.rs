@@ -1,6 +1,6 @@
 use color_eyre::Result;
 use gadget_sdk as sdk;
-pub use hyperlane_warp_route_deployer_blueprint as blueprint;
+pub use hyperlane_relayer_blueprint as blueprint;
 use sdk::ctx::TangleClientContext;
 use sdk::info;
 use sdk::job_runner::MultiJobRunner;
