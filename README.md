@@ -1,53 +1,44 @@
-# <h1 align="center"> Hyperlane Warp Route Deployer Blueprint 🌐 </h1>
+# <h1 align="center"> Hyperlane Relayer Blueprint 🌐 </h1>
 
 ## 📚 Overview
 
-This blueprint contains tasks for an operator to initialize and manage their own Hyperlane warp routes.
+This blueprint contains tasks for an operator to initialize and manage their
+own [Hyperlane relayer](https://docs.hyperlane.xyz/docs/operate/overview-agents#relayer).
 
 ## 🚀 Features
 
 This Blueprint provides the following key feature:
 
-### 1. Operate a Warp Route
+* Automated devops for running Hyperlane relayers
+* Tangle Network integration for on-demand instancing of relayers
 
-- **Function**: `operate_a_warp_route`
-- **Description**: Initializes and operates a Hyperlane warp route, including deploying Hyperlane contracts,
-  initializing the warp route, updating core configurations, and then validating/operating over the route.
-- **Job ID**: 0
-- **Parameters**:
-    - `config`: Configuration for the warp route (Vec<u8>)
-    - `advanced`: Boolean flag for advanced setup
-    - `use_existing_core_config`: Existing core configuration (Vec<u8>)
+## 📋 Pre-requisites
 
-This job is designed to be instanced as part of the Tangle network's Cloud, allowing for decentralized management and
-operation of Hyperlane nodes and warp routes.
+* [Docker](https://docs.docker.com/engine/install/)
+* [Docker Compose](https://docs.docker.com/compose/install/)
+* [cargo-tangle](https://crates.io/crates/cargo-tangle)
 
-## 🔧 Usage
+## 💻 Usage
 
-To interact with this job, you'll need to deploy this blueprint to Tangle. Upon deployment, the Blueprint will be able
-to be instanced and executed by any Tangle operator registered on the blueprint. The job can be triggered by
-sending the appropriate transaction to the Tangle network, specifying the job ID and required parameters.
+To use this blueprint:
 
-For example, to operate a warp route, you would prepare a transaction with job ID 0 and include the configuration,
-advanced flag, and existing core configuration (if any) as parameters.
+1. Review the blueprint specifications in the `src/` directory.
+2. Follow the [Hyperlane documentation](https://docs.hyperlane.xyz/docs/operate/relayer/run-relayer) to understand the
+   relayer setup process.
+3. Adapt the blueprint to your specific relayer configuration needs.
+4. Deploy the blueprint on the Tangle Network using the Tangle CLI:
 
-Please refer to the Tangle network documentation for detailed instructions on how to submit jobs and interact with AVS
-Blueprints.
-
-## 📚 Prerequisites
-
-Before you can run this project, you will need to have the following software installed on your machine:
-
-- [Rust](https://www.rust-lang.org/tools/install)
-- [Tangle](https://github.com/tangle-network/tangle?tab=readme-ov-file#-getting-started-)
-
-## 🛠️ Build
-
-To build the project, run:
-
+```shell
+$ cargo tangle blueprint deploy
 ```
-cargo build --release
-```
+
+Upon deployment, the Blueprint will be able to be instanced and executed by any Tangle operator registered on the
+blueprint.
+
+## 🔗 External Links
+
+- [Hyperlane Documentation](https://docs.hyperlane.xyz)
+- [Tangle Network](https://www.tangle.tools/)
 
 ## 📜 License
 

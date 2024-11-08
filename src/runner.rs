@@ -21,7 +21,7 @@ use std::error::Error;
 ///
 /// ```
 /// use gadget_sdk::executor::process::manager::GadgetProcessManager;
-/// use hyperlane_warp_route_deployer_blueprint::runner::run_and_focus_multiple;
+/// use hyperlane_relayer_blueprint::runner::run_and_focus_multiple;
 ///
 /// async fn example() -> Result<(), Box<dyn std::error::Error>> {
 ///     let mut manager = GadgetProcessManager::new();

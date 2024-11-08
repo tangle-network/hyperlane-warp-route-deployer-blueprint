@@ -1,9 +1,9 @@
 {
-  "name": "hyperlane-warp-route-deployer-blueprint",
+  "name": "hyperlane-relayer-blueprint",
   "version": "1.0.0",
   "description": "A Hyperlane AVS Blueprint for Tangle / Eigenlayer / and other restaking infrastructures.",
   "main": "index.js",
-  "repository": "https://github.com/tangle-network/hyperlane-warp-route-deployer-blueprint",
+  "repository": "https://github.com/tangle-network/hyperlane-relayer-blueprint",
   "author": "hello@webb.tools",
   "license": "MIT",
   "dependencies": {
